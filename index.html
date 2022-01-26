@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en"> 
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<!-- Tell the browser to be responsive to screen width -->
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="">
+<meta name="author" content="">
+
+<title>Child protection centers</title> 
+<link rel="shortcut icon" href="favicon.ico"> 
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+<script defer src="public/home/js/font-awesome/all.min.js"></script>
+
+<link id="theme-style" rel="stylesheet" href="public/home/css/home.css">
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+crossorigin=""/>
+
+<link href='https://api.mapbox.com/mapbox.js/plugins/leaflet-fullscreen/v1.0.1/leaflet.fullscreen.css' rel='stylesheet' />
+<style>
+.no-wrap {
+    background: rgb(241, 238, 238);
+    overflow-x: hidden;
+}
+#map {
+    width: 100%;
+}
+
+.loader {
+    margin-top: 15%;
+    margin-left: auto;
+    margin-right: auto;
+    border: 4px solid #000;
+    border-radius: 50%;
+    border-top: 4px solid #3498db;
+    width: 120px;
+    height: 120px;
+    -webkit-animation: spin 2s linear infinite; /* Safari */
+    animation: spin 2s linear infinite;
+    
+}
+
+@-webkit-keyframes spin {
+  0% { -webkit-transform: rotate(0deg); }
+  100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+		table {
+			overflow-y: auto;
+            overflow-x: hidden;
+            height: 200px;
+            width: 200px;
+		}
+		td {
+			border: 1px solid black;
+		}
+
+		.legend {
+			padding: 6px 18px;
+			background-color: rgba(255,255,255,0.8);
+			box-shadow: 0 0 15px rgba(0,0,0,0.2);
+			border-radius: 5px;
+		}
+		.legend i {
+			width: 18px;
+			height: 18px;
+			float: left;
+			margin-right: 8px;
+			opacity: 0.7;
+		}
+		div.legend.leaflet-control br {
+			clear: both;
+		}
+	</style>
+</head> 
+
+<body class="no-wrap">   	
+
+<div >
+
+<div >
+<div>
+
+<div class="row">
+<div class="col-md-12 col-lg-12 col-xs-12" id="flatSidebar">
+
+<div class="row">
+<div class="col-md-12 col-lg-12 col-xs-12 col-sm-12" id="map-div">
+<div style=" height: 50px; line-height: 50px; background: #fff"><p style="padding-left: 5px;"><strong>Children Agenda Forum Partners Involved in Eradication of Violence Against Children</strong></p></div>
+<div id="map" style="margin-left: 20px;margin-right: 20%;">
+</div> 
+</div>
+</div>
+
+</div>
+
+</div>
+
+
+</div>
+</div>
+
+</div>    					
+
+<script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+<script type="text/javascript" src="public/home/js/shp/shp.js"></script>
+<script src="public/home/js/bootstrap.min.js"></script> 
+<script src="public/home/js/home.js"></script>  
+<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js" integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+crossorigin=""></script>
+<script src="public/leaflet.ajax.min.js" ></script>
+<script src='https://api.mapbox.com/mapbox.js/plugins/leaflet-fullscreen/v1.0.1/Leaflet.fullscreen.min.js'></script>
+<script src="public/data/data.json"></script>
+<script type="text/javascript">
+
+var map;
+//==========================
+$(window).on("resize", function () { $("#map").height($(window).height() ); }).trigger("resize");
+
+$(function() {
+map = new L.map('map').setView([0.5, 36.819], 6);
+// add basemaps from cartodb - darkmatter.
+CartoDB = L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager_labels_under/{z}/{x}/{y}.png', {
+	attribution: '&copy; GeopsyResearch, foloo; contributors: <a href="http://cartodb.com/attributions#basemaps">CartoDB</a>',
+	subdomains:'abcd',
+	minZoom:4,
+	maxZoom:20
+}).addTo(map);
+// add the second basemap from OSM
+var osm = L.tileLayer ('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
+	attribution: '&copy; OSM',
+	minZoom: 4,
+	maxZoom: 20
+});
+
+var baseLayers = {
+    "CartoDB": CartoDB,
+    "OSM": osm
+};
+
+lc = L.control.layers(baseLayers).addTo(map);
+
+for(var i=0; i<data.length; i++){
+    var chunk = data[i];
+
+    let lat = chunk.Latitude;
+    let lng = chunk.Longitude;
+    let strategy4 = chunk.Strategy4;
+    let organization = chunk.Organization;
+    let county1 = chunk.County;
+    let contact = chunk.Contact;
+    let position = chunk.Position;
+    let phone = chunk.Phone;
+    let email = chunk.Email;
+    let website = chunk.Website;
+    let organization_type = chunk.Organization_type;
+    let risks1 = chunk.Risks;
+    let other_risks = chunk.Other;
+    let strategy11 = chunk.Strategy1;
+    let strategy21 = chunk.Strategy2;
+    let strategy31 = chunk.Strategy3;
+    let strategy51 = chunk.Strategy5;
+    let strategy61 = chunk.Strategy6;
+	var greenIcon = L.icon({
+    iconUrl: 'public/home/radial.gif',
+    iconSize:     [20, 20]
+});
+    if(lat != null && lng != null){
+            let circle = L.marker([lat, lng], {icon: greenIcon}).addTo(map);
+let count = [];
+var pt = county1[0].match(/;/g);
+if(pt != null){
+    count = county1[0].split(';');
+} else {
+    count.push(county1[0]);
+}
+if(county1[0] == ''){
+    let county = county1[1];
+} else {
+    county = county1[0];
+}
+
+// strategy 1
+let st1 = strategy11.match(/;/g);
+let strategy1 = [];
+if(st1 != null){
+ strategy1 = strategy11.split(';');
+} else {
+    strategy1.push(strategy11);
+}
+
+// strategy 2
+let st2 = strategy21.match(/;/g);
+let strategy2 = [];
+if(st2 != null){
+ strategy2 = strategy21.split(';');
+} else {
+    strategy2.push(strategy21);
+}
+
+// strategy 3
+let st3 = strategy31.match(/;/g);
+let strategy3 = [];
+if(st3 != null){
+ strategy3 = strategy31.split(';');
+} else {
+    strategy3.push(strategy31);
+}
+
+// strategy 1
+let st5 = strategy51.match(/;/g);
+let strategy5 = [];
+if(st5 != null){
+ strategy5 = strategy51.split(';');
+} else {
+    strategy5.push(strategy51);
+}
+
+// strategy 1
+let st6 = strategy61.match(/;/g);
+let strategy6 = [];
+if(st6 != null){
+ strategy6 = strategy61.split(';');
+} else {
+    strategy6.push(strategy61);
+}
+// Email Address  -> email
+// website for your organizetion(if available) -> website
+// type of organization -> type
+let risks = [];
+let a = risks1.match(/;/g);
+
+if(a != null){
+    risks = risks1.split(';');
+} else {
+    risks.push(risks1);
+}
+
+
+if(strategy4 != ''){
+    let pattern = strategy4.match(/;/g);
+
+
+    if(pattern != null){
+        let interventionArr = strategy4.split(';');
+        let table = '<div class="table" style="height: 300px; overflow-y: auto; overflow-x: hidden;" ><table  ><tbody><tr><td><strong>Name</strong></td><td><strong>'+organization+'</strong></td></tr><tr><td><strong>County of operation</strong></td><td><ul>'+count.map((data) => {return "<li>"+data+"</li>"}).join('')+'</ul></td></tr><tr><td><strong>Contact</strong></td><td><ul><li>Name: '+contact+'</li><li>Position: '+position+'</li><li>Email Address:<a href="mailto:'+email+'"> '+email+'</a></li><li>Website: <a href="https://'+website+'" target="_blank">'+website+'</a></li></ul></tr><tr><td><strong>Type of organization</strong></td><td>'+organization_type+'</td></tr><tr><td><strong>Risks addressed</strong></td><td><ul>'+risks.map((data, index) => {return "<li>"+data+"</li>"}).join('')+'</ul><br>Other risks: '+other_risks+'</td></tr><tr><td><strong>STRATEGIC AREA 1: LAWS AND POLICIES</strong></td><td><ul>'+strategy1.map((data) => {return "<li>"+data+"</li>"}).join('')+'</ul></td></tr><tr><td><strong>STRATEGIC AREA 2: FAMILY SUPPORT – PARENTING SKILLS AND ECONOMIC STRENGTHENING</strong></td><td><ul>'+strategy2.map((data) => {return "<li>"+data+"</li>"}).join('')+'</ul></td></tr><tr><td><strong>STRATEGIC AREA 3: EDUCATION AND LIFE SKILLS</strong></td><td><ul>'+strategy3.map((data) => {return "<li>"+data+"</li>"}).join('')+'</ul></td></tr><tr><td><strong>STRATEGIC AREA 4: COMMUNITY INTERVENTIONS ADDRESSING NORMS AND VALUES</strong></td><td><ul>'+interventionArr.map((data) => {
+            return "<li style='margin-top: 0; padding-top: 0;'>"+data+"</li>"}).join('')+'</ul></td></tr><tr><td><strong>STRATEGIC AREA 5: RESPONSE AND SUPPORT SERVICES</strong></td><td><ul>'+strategy5.map((data) => {return "<li>"+data+"</li>"}).join('')+'</ul></td></tr><tr><td><strong>STRATEGIC AREA 6: COORDINATION</strong></td><td><ul>'+strategy6.map((data) => {return "<li>"+data+"</li>"}).join('')+'</ul></td></tr></tbody></table></div>';
+        circle.bindPopup(table);
+
+    } else {
+         let table1 = '<div class="table" style="height: 300px; overflow-y: auto; overflow-x: hidden;" ><table  ><tbody><tr><td><strong>Name</strong></td><td><strong>'+organization+'</strong></td></tr><tr><td><strong>County of operation</strong></td><td><ul>'+count.map((data) => {return "<li>"+data+"</li>"}).join('')+'</ul></td></tr><tr><td><strong>Contact</strong></td><td><ul><li>Name: '+contact+'</li><li>Position: '+position+'</li><li>Email Address:<a href="mailto:'+email+'"> '+email+'</a></li><li>Website: <a href="https://'+website+'" target="_blank">'+website+'</a></li></ul></tr><tr><td><strong>Type of organization</strong></td><td>'+organization_type+'</td></tr><tr><td><strong>Risks addressed</strong></td><td><ul>'+risks.map((data, index) => {return "<li>"+data+"</li>"}).join('')+'</ul><br>Other risks: '+other_risks+'</td></tr><tr><td><strong>STRATEGIC AREA 1: LAWS AND POLICIES</strong></td><td><ul>'+strategy1.map((data) => {return "<li>"+data+"</li>"}).join('')+'</ul></td></tr><tr><td><strong>STRATEGIC AREA 2: FAMILY SUPPORT – PARENTING SKILLS AND ECONOMIC STRENGTHENING</strong></td><td><ul>'+strategy2.map((data) => {return "<li>"+data+"</li>"}).join('')+'</ul></td></tr><tr><td><strong>STRATEGIC AREA 3: EDUCATION AND LIFE SKILLS</strong></td><td><ul>'+strategy3.map((data) => {return "<li>"+data+"</li>"}).join('')+'</ul></td></tr><tr><td><strong>STRATEGIC AREA 4: COMMUNITY INTERVENTIONS ADDRESSING NORMS AND VALUES</strong></td><td><ul>'+strategy4+'</ul></td></tr><tr><td><strong>STRATEGIC AREA 5: RESPONSE AND SUPPORT SERVICES</strong></td><td><ul>'+strategy5.map((data) => {return "<li>"+data+"</li>"}).join('')+'</ul></td></tr><tr><td><strong>STRATEGIC AREA 6: COORDINATION</strong></td><td><ul>'+strategy6.map((data) => {return "<li>"+data+"</li>"}).join('')+'</ul></td></tr></tbody></table></div>';
+
+      circle.bindPopup(table1);
+
+    }
+} else {
+    let table2 = '<div class="table" style="height: 300px; overflow-y: auto; overflow-x: hidden;" ><table  ><tbody><tr><td><strong>Name</strong></td><td><strong>'+organization+'</strong></td></tr><tr><td><strong>County of operation</strong></td><td><ul>'+count.map((data) => {return "<li>"+data+"</li>"}).join('')+'</ul></td></tr><tr><td><strong>Contact</strong></td><td><ul><li>Name: '+contact+'</li><li>Position: '+position+'</li><li>Email Address:<a href="mailto:'+email+'"> '+email+'</a></li><li>Website: <a href="https://'+website+'" target="_blank">'+website+'</a></li></ul></tr><tr><td><strong>Type of organization</strong></td><td>'+organization_type+'</td></tr><tr><td><strong>Risks addressed</strong></td><td><ul>'+risks.map((data, index) => {return "<li>"+data+"</li>"}).join('')+'</ul><br>Other risks: '+other_risks+'</td></tr><tr><td><strong>STRATEGIC AREA 1: LAWS AND POLICIES</strong></td><td><ul>'+strategy1.map((data) => {return "<li>"+data+"</li>"}).join('')+'</ul></td></tr><tr><td><strong>STRATEGIC AREA 2: FAMILY SUPPORT – PARENTING SKILLS AND ECONOMIC STRENGTHENING</strong></td><td><ul>'+strategy2.map((data) => {return "<li>"+data+"</li>"}).join('')+'</ul></td></tr><tr><td><strong>STRATEGIC AREA 3: EDUCATION AND LIFE SKILLS</strong></td><td><ul>'+strategy3.map((data) => {return "<li>"+data+"</li>"}).join('')+'</ul></td></tr><tr><td><strong>STRATEGIC AREA 4: COMMUNITY INTERVENTIONS ADDRESSING NORMS AND VALUES</strong></td><td><ul><li>NULL</li></ul></td></tr><tr><td><strong>STRATEGIC AREA 5: RESPONSE AND SUPPORT SERVICES</strong></td><td><ul>'+strategy5.map((data) => {return "<li>"+data+"</li>"}).join('')+'</ul></td></tr><tr><td><strong>STRATEGIC AREA 6: COORDINATION</strong></td><td><ul>'+strategy6.map((data) => {return "<li>"+data+"</li>"}).join('')+'</ul></td></tr></tbody></table></div>';
+        circle.bindPopup(table2);
+
+
+}
+    }
+}
+
+});
+
+</script>
+</body>
+</html> 
+
