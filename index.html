@@ -12,9 +12,9 @@
 <link rel="shortcut icon" href="favicon.ico"> 
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
-<script defer src="public/home/js/font-awesome/all.min.js"></script>
+<script defer src="home/js/font-awesome/all.min.js"></script>
 
-<link id="theme-style" rel="stylesheet" href="public/home/css/home.css">
+<link id="theme-style" rel="stylesheet" href="home/css/home.css">
 
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
 integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
@@ -112,14 +112,14 @@ crossorigin=""/>
 </div>    					
 
 <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
-<script type="text/javascript" src="public/home/js/shp/shp.js"></script>
-<script src="public/home/js/bootstrap.min.js"></script> 
-<script src="public/home/js/home.js"></script>  
+<script type="text/javascript" src="home/js/shp/shp.js"></script>
+<script src="home/js/bootstrap.min.js"></script> 
+<script src="home/js/home.js"></script>  
 <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js" integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
 crossorigin=""></script>
-<script src="public/leaflet.ajax.min.js" ></script>
+<script src="leaflet.ajax.min.js" ></script>
 <script src='https://api.mapbox.com/mapbox.js/plugins/leaflet-fullscreen/v1.0.1/Leaflet.fullscreen.min.js'></script>
-<script src="public/data/data.json"></script>
+<script src="data/data.json"></script>
 <script type="text/javascript">
 
 var map;
@@ -127,7 +127,7 @@ var map;
 $(window).on("resize", function () { $("#map").height($(window).height() ); }).trigger("resize");
 
 $(function() {
-map = new L.map('map').setView([0.5, 36.819], 6);
+map = new L.map('map').setView([0.5, 36.819], 7);
 // add basemaps from cartodb - darkmatter.
 CartoDB = L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager_labels_under/{z}/{x}/{y}.png', {
 	attribution: '&copy; GeopsyResearch, foloo; contributors: <a href="http://cartodb.com/attributions#basemaps">CartoDB</a>',
@@ -171,7 +171,7 @@ for(var i=0; i<data.length; i++){
     let strategy51 = chunk.Strategy5;
     let strategy61 = chunk.Strategy6;
 	var greenIcon = L.icon({
-    iconUrl: 'public/home/radial.gif',
+    iconUrl: 'home/radial.gif',
     iconSize:     [15, 15]
 });
     if(lat != null && lng != null){
